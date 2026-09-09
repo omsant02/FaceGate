@@ -36,7 +36,7 @@ export class FaceGate {
 
   constructor(config: FaceGateConfig) {
     this.apiKey = config.apiKey
-    this.baseUrl = config.baseUrl ?? 'https://facegate.vercel.app'
+    this.baseUrl = config.baseUrl ?? 'https://face-gate-ecru.vercel.app'
   }
 
   async enroll(userId: string): Promise<EnrollResponse> {
