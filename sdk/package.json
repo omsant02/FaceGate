@@ -4,7 +4,10 @@
   "description": "Stop credential sharing with privacy-preserving face authentication",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
@@ -12,7 +15,13 @@
   "devDependencies": {
     "typescript": "^5.9.2"
   },
-  "keywords": ["facegate", "world-id", "selfie-check", "authentication", "face-auth"],
+  "keywords": [
+    "facegate",
+    "world-id",
+    "selfie-check",
+    "authentication",
+    "face-auth"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
