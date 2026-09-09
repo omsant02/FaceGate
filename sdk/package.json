@@ -1,0 +1,21 @@
+{
+  "name": "@facegate/sdk",
+  "version": "0.1.0",
+  "description": "Stop credential sharing with privacy-preserving face authentication",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  },
+  "keywords": ["facegate", "world-id", "selfie-check", "authentication", "face-auth"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omsant02/FaceGate"
+  }
+}
