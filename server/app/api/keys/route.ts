@@ -68,3 +68,37 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Failed to fetch API key' }, { status: 500 })
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const authHeader = request.headers.get('authorization')
+    if (!authHeader) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const token = authHeader.replace('Bearer ', '')
+    const claims = await privy.utils().auth().verifyAccessToken(token)
+
+    await connectDB()
+
+    // Delete existing key
+    await ApiKey.deleteOne({ userId: claims.user_id })
+
+    // Generate new key and action
+    const { appName } = await request.json()
+    const key = `fg_live_${crypto.randomBytes(16).toString('hex')}`
+    const action = `facegate_${crypto.randomBytes(8).toString('hex')}`
+
+    const apiKey = await ApiKey.create({
+      key,
+      userId: claims.user_id,
+      email: claims.user_id,
+      appName: appName || 'default',
+      action,
+    })
+
+    return NextResponse.json({ apiKey: apiKey.key, rotated: true })
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to rotate API key' }, { status: 500 })
+  }
+}
