@@ -75,5 +75,3 @@ export class FaceGate {
     return res.json()
   }
 }
-
-export { FaceGateWidget } from './react'

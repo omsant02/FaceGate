@@ -1,23 +1,9 @@
 {
   "name": "@facegate/sdk",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Stop credential sharing with privacy-preserving face authentication",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js"
-    },
-    "./react": {
-      "types": "./dist/react.d.ts",
-      "import": "./dist/react.js",
-      "require": "./dist/react.js",
-      "default": "./dist/react.js"
-    }
-  },
   "files": [
     "dist",
     "README.md"
@@ -26,17 +12,7 @@
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {
-    "@worldcoin/idkit": "^4.2.2",
-    "qrcode": "^1.5.4"
-  },
-  "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
-  },
   "devDependencies": {
-    "@types/qrcode": "^1.5.6",
-    "@types/react": "^19",
     "typescript": "^5.9.2"
   },
   "keywords": [
