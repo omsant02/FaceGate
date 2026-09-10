@@ -1,12 +1,34 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
 interface OverviewTabProps {
   apiKey: string | null
   setActiveTab: (tab: string) => void
+  getAccessToken: () => Promise<string | null>
 }
 
-export default function OverviewTab({ apiKey, setActiveTab }: OverviewTabProps) {
+export default function OverviewTab({ apiKey, setActiveTab, getAccessToken }: OverviewTabProps) {
+  const [enrollments, setEnrollments] = useState<number | null>(null)
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = await getAccessToken()
+        if (!token) return
+        const res = await fetch('/api/stats', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        const data = await res.json()
+        if (typeof data.enrollments === 'number') setEnrollments(data.enrollments)
+      } catch (e) {}
+    }
+    fetchStats()
+  }, [apiKey])
+
   const stats = [
     { label: 'API Status', value: apiKey ? 'Active' : 'No key yet', color: apiKey ? '#16A34A' : '#A1A1AA' },
-    { label: 'Enrollments', value: '—', color: '#18181B' },
+    { label: 'Enrollments', value: enrollments !== null ? String(enrollments) : '—', color: '#18181B' },
     { label: 'Blocked attempts', value: '—', color: '#18181B' },
   ]
 
@@ -32,13 +54,9 @@ export default function OverviewTab({ apiKey, setActiveTab }: OverviewTabProps) 
 
       {!apiKey && (
         <div style={{
-          background: '#EFF6FF',
-          border: '1px solid #BFDBFE',
-          borderRadius: '10px',
-          padding: '20px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          background: '#EFF6FF', border: '1px solid #BFDBFE',
+          borderRadius: '10px', padding: '20px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <div>
             <div style={{ fontSize: '15px', fontWeight: '600', color: '#3B82F6', marginBottom: '4px' }}>

@@ -153,7 +153,7 @@ export default function Dashboard() {
 
         <div style={{ padding: '32px', flex: 1 }}>
           {activeTab === 'overview' && (
-            <OverviewTab apiKey={apiKey} setActiveTab={setActiveTab} />
+            <OverviewTab apiKey={apiKey} setActiveTab={setActiveTab} getAccessToken={getAccessToken} />
           )}
           {activeTab === 'apikey' && (
             <ApiKeyTab
