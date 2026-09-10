@@ -1,17 +1,21 @@
 {
   "name": "@facegate/sdk",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Stop credential sharing with privacy-preserving face authentication",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     },
     "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
       "require": "./dist/react.js",
-      "types": "./dist/react.d.ts"
+      "default": "./dist/react.js"
     }
   },
   "files": [
