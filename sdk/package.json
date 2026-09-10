@@ -1,6 +1,6 @@
 {
   "name": "@facegate/sdk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Stop credential sharing with privacy-preserving face authentication",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,10 @@
       "types": "./dist/react.d.ts"
     }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
@@ -30,7 +33,12 @@
     "@types/react": "^19",
     "typescript": "^5.9.2"
   },
-  "keywords": ["facegate", "world-id", "selfie-check", "authentication"],
+  "keywords": [
+    "facegate",
+    "world-id",
+    "selfie-check",
+    "authentication"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
