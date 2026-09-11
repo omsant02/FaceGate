@@ -1,69 +1,147 @@
-import Image from "next/image";
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Navbar from './components/Navbar'
+import MovieGrid from './components/MovieGrid'
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+  const router = useRouter()
+  const [user, setUser] = useState<{ email: string; verified: boolean } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const stored = localStorage.getItem('demonetflix_user')
+    if (stored) {
+      setUser(JSON.parse(stored))
+    }
+    setLoading(false)
+  }, [])
+
+  if (loading) return (
+    <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ color: '#E50914', fontSize: '28px', fontWeight: '900', fontStyle: 'italic' }}>Demo Netflix</div>
     </div>
-  );
+  )
+
+  if (!user) return (
+    <div style={{ minHeight: '100vh', background: '#000' }}>
+      <Navbar />
+      <div style={{
+        position: 'relative', height: '100vh',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'linear-gradient(135deg, #1a0000 0%, #0d0d0d 50%, #000814 100%)',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.8) 100%)',
+        }}/>
+        <div style={{ position: 'relative', textAlign: 'center', maxWidth: '680px', padding: '0 24px' }}>
+          <div style={{
+            fontSize: '13px', fontWeight: '600', color: '#E50914',
+            letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '20px',
+          }}>
+            Powered by FaceGate
+          </div>
+          <h1 style={{
+            fontSize: '64px', fontWeight: '900', lineHeight: '1.0',
+            letterSpacing: '-2px', marginBottom: '20px',
+          }}>
+            Unlimited movies,<br />one face.
+          </h1>
+          <p style={{
+            fontSize: '20px', color: '#B3B3B3', lineHeight: '1.5', marginBottom: '40px',
+          }}>
+            Watch anywhere. Only you can access your account.<br />
+            Face verification powered by World ID.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <Link href="/signup">
+              <button style={{
+                background: '#E50914', color: '#fff', border: 'none',
+                padding: '16px 36px', borderRadius: '4px',
+                fontSize: '18px', fontWeight: '700', cursor: 'pointer',
+              }}>
+                Get Started
+              </button>
+            </Link>
+            <Link href="/login">
+              <button style={{
+                background: 'rgba(109,109,110,0.7)', color: '#fff', border: 'none',
+                padding: '16px 36px', borderRadius: '4px',
+                fontSize: '18px', fontWeight: '700', cursor: 'pointer',
+              }}>
+                Sign In
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#000', paddingBottom: '60px' }}>
+      <Navbar email={user.email} verified={user.verified} />
+
+      <div style={{
+        position: 'relative', height: '70vh',
+        background: 'linear-gradient(135deg, #1a0a00 0%, #0a0a1a 100%)',
+        display: 'flex', alignItems: 'flex-end',
+        paddingBottom: '60px', paddingLeft: '60px',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to right, rgba(0,0,0,0.8) 40%, transparent 100%), linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)',
+        }}/>
+
+        <div style={{ position: 'relative', maxWidth: '500px' }}>
+          {user.verified && (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(70,211,105,0.15)', border: '1px solid rgba(70,211,105,0.4)',
+              borderRadius: '4px', padding: '6px 12px', fontSize: '12px',
+              color: '#46D369', fontWeight: '600', marginBottom: '16px', letterSpacing: '0.05em',
+            }}>
+              ✓ IDENTITY VERIFIED
+            </div>
+          )}
+
+          <h1 style={{
+            fontSize: '56px', fontWeight: '900', lineHeight: '1.05',
+            letterSpacing: '-2px', marginBottom: '16px',
+          }}>
+            Stranger Things
+          </h1>
+          <p style={{
+            fontSize: '16px', color: '#B3B3B3', lineHeight: '1.5', marginBottom: '24px',
+          }}>
+            When a young boy disappears, his mother, a police chief and his friends must confront terrifying supernatural forces.
+          </p>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button style={{
+              background: '#fff', color: '#000', border: 'none',
+              padding: '12px 28px', borderRadius: '4px',
+              fontSize: '16px', fontWeight: '700', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: '8px',
+            }}>
+              ▶ Play
+            </button>
+            <button style={{
+              background: 'rgba(109,109,110,0.7)', color: '#fff', border: 'none',
+              padding: '12px 28px', borderRadius: '4px',
+              fontSize: '16px', fontWeight: '700', cursor: 'pointer',
+            }}>
+              ⓘ More Info
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <MovieGrid verified={user.verified} onUnlockClick={() => router.push('/login')} />
+    </div>
+  )
 }
