@@ -188,8 +188,9 @@ FaceGate stores nothing about the user's face. The Selfie Check runs entirely on
 ---
  
 ## Links
- 
+
 - **Dashboard:** [face-gate-ecru.vercel.app](https://face-gate-ecru.vercel.app)
 - **Demo:** [demo-netflix-green.vercel.app](https://demo-netflix-green.vercel.app)
 - **npm:** [@facegate/sdk](https://npmjs.com/package/@facegate/sdk)
+- **Presentation:** [Canva Slides](https://canva.link/it3ep8cg8xrx4h7)
 - **Built at:** ETHGlobal Online 2026 — World ID Selfie Check prize track
