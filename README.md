@@ -108,11 +108,15 @@ FaceGate stores nothing about the user's face. The Selfie Check runs on the user
 
 ---
 
-## Demo
+## Repo Structure
 
-See [`demo-netflix/`](./demo-netflix/) — a Netflix-style streaming app showing FaceGate integration end to end. Sign up, enroll your face, content unlocks. Sign in from a different face — get blocked.
-
-**Live demo:** [demo-netflix-green.vercel.app](https://demo-netflix-green.vercel.app)
+```
+facegate/
+├── server/          — Next.js backend + developer dashboard
+├── sdk/             — @facegate/sdk npm package
+├── demo-netflix/    — Netflix-style demo app
+└── FEEDBACK.md      — World ID Selfie Check developer feedback
+```
 
 ---
 
