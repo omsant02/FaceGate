@@ -6,6 +6,7 @@ import FaceScanAnimation from './components/FaceScanAnimation'
 import CodeBlock from './components/CodeBlock'
 import StatsBar from './components/StatsBar'
 import Terminal from './components/Terminal'
+import FlowSection from './components/FlowSection'
 
 export default function Home() {
   return (
@@ -125,7 +126,7 @@ export default function Home() {
         </div>
       </main>
 
-      <StatsBar />
+      <FlowSection />
     </div>
   )
 }
