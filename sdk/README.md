@@ -2,17 +2,19 @@
 
 Stop credential sharing with privacy-preserving face authentication.
 
-Zero biometric data stored. One API key. Three functions.
+Zero biometric data stored. One API key. Four functions.
 
 ## Install
 
 ```bash
-npm install @facegate/sdk
+npm install @facegate/sdk @worldcoin/idkit
 ```
+
+> `@worldcoin/idkit` must be installed directly in your app alongside this SDK. Due to a WebAssembly bundler constraint, the IDKit QR widget cannot be resolved from a nested dependency — it must be a direct dependency of your app.
 
 ## Quick Start
 
-Get your API key at [facegate.dev](https://facegate.dev)
+Get your API key at [face-gate-ecru.vercel.app](https://face-gate-ecru.vercel.app)
 
 ```typescript
 import { FaceGate } from '@facegate/sdk'
@@ -49,6 +51,8 @@ const { authorized } = await gate.verify(userId, idkitProof)
 
 ## Links
 
+- [Dashboard](https://face-gate-ecru.vercel.app)
+- [Demo](https://demo-netflix-green.vercel.app)
 - [GitHub](https://github.com/omsant02/FaceGate)
 - [npm](https://npmjs.com/package/@facegate/sdk)
 - [World ID Selfie Check](https://docs.world.org/world-id/credentials/11)

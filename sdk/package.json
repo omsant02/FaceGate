@@ -19,9 +19,14 @@
     "facegate",
     "world-id",
     "selfie-check",
-    "authentication"
+    "authentication",
+    "credential-sharing",
+    "face-verification",
+    "subscription",
+    "abuse-prevention"
   ],
   "license": "MIT",
+  "homepage": "https://face-gate-ecru.vercel.app",
   "repository": {
     "type": "git",
     "url": "https://github.com/omsant02/FaceGate.git"
