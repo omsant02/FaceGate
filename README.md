@@ -66,6 +66,11 @@ The FaceGate server is a Next.js backend deployed on Vercel. It is the trust lay
 - When a developer calls `gate.verify()` or `gate.confirm()`, the server verifies the ZK proof with World's API (`/api/v4/verify/{rp_id}`), extracts the nullifier from the response, and stores or matches it in MongoDB.
 - Stores only nullifiers in MongoDB — no face data, no images, no personal information.
 
+https://face-gate-ecru.vercel.app/
+
+<img width="2954" height="1556" alt="image" src="https://github.com/user-attachments/assets/5b1ad872-d6f3-4bdd-ae24-2d9e3ece11c4" />
+
+
 ### 2. SDK (sdk/)
 
 Published as @facegate/sdk on npm. This is what platform developers install.
@@ -76,9 +81,19 @@ Published as @facegate/sdk on npm. This is what platform developers install.
 - Handles API key auth on every request.
 - Does not include the IDKit QR widget — due to a WebAssembly bundler constraint (webpack 5 cannot resolve wasm files from nested dependencies), developers must install `@worldcoin/idkit` directly alongside this SDK for the frontend widget.
 
+https://www.npmjs.com/package/@facegate/sdk
+
+<img width="2942" height="1688" alt="image" src="https://github.com/user-attachments/assets/2a7f1110-e808-4016-92e5-d7ec5d4c1b8f" />
+
+
 ### 3. Demo Netflix (demo-netflix/)
 
 A Netflix-style demo app deployed on Vercel showing a complete FaceGate integration — signup with face enrollment, login with face verification, and access blocking for unrecognized faces.
+
+https://demo-netflix-green.vercel.app/
+
+<img width="2497" height="1201" alt="image" src="https://github.com/user-attachments/assets/dfa06b42-a7b0-422f-a2f8-923a3701f5ba" />
+
 
 ---
 
