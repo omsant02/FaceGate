@@ -1,51 +1,42 @@
 # FaceGate
 
-## What We Built
+> One account. One face. No sharing.
 
-Netflix loses revenue every time one paid account is shared across five households. The password is correct — but the person isn't. FaceGate treats Selfie Check as a **continuity and abuse-prevention signal**: every login must prove not just knowledge of a password, but that the same face is returning.
+Netflix loses **$9.1 billion** annually to credential sharing. The password is correct — but the person isn't. FaceGate fixes this.
 
-FaceGate is a provider SDK — a thin abstraction layer so that subscription platforms (streaming, SaaS, gaming, education) can add World ID Selfie Check without touching World ID directly. The platform developer gets one API key from FaceGate. Our server holds the World ID credentials and handles all proof verification internally. Each developer gets a unique action string, ensuring nullifier isolation across platforms — the same person on Netflix and Spotify produces different nullifiers.
-
-**The integration from a developer's perspective:**
-- Signup → `gate.enroll(userId)` → show IDKit QR → user completes Selfie Check → face enrolled
-- Every login → `gate.verify(userId, proof)` → same face → same nullifier → access granted; different face → blocked
-
-**On friction vs bypass:** Selfie Check creates meaningful friction, not a perfect lock. A determined user could share a QR code screenshot with someone else — the same way someone could share an OTP. FaceGate treats this the same way Netflix treats household IP checks: a signal that raises the cost of abuse, not an absolute barrier. For stronger guarantees (single-person accounts, IP binding, device fingerprinting), the platform layer adds those controls. FaceGate handles the biometric continuity signal.
-
-**Architecture:** Provider/wrapper model. One World ID app, many downstream platforms via unique per-developer action strings.
+FaceGate is a developer SDK that adds face continuity verification to any subscription platform. Using World ID Selfie Check, it treats biometric identity as a **continuity and abuse-prevention signal** — confirming the same person returns on every login, not just the same password. This creates meaningful friction: even coordinated sharing requires the original account owner to be actively available for every single login, making casual credential sharing impractical. Zero biometric data stored.
 
 ---
 
-**One account. One face. No sharing.**
+## The Problem
 
-FaceGate stops credential sharing on subscription platforms using World ID Selfie Check. It adds continuity verification — confirming that the same person returns on every login, not just the same password — creating meaningful friction against account abuse without storing any biometric data.
+One Netflix account. Five households using it. The platform loses revenue on every shared account. Password-based auth has no way to enforce "one person per account."
 
-Built for streaming services, SaaS platforms, gaming, education, and any subscription product where credential sharing costs revenue. Netflix, Spotify, Disney+, Adobe — the problem is the same: one paid account, shared by many.
+Current solutions — household IP detection, device limits — are easily bypassed with a VPN or device switch. They detect location, not identity.
+
+FaceGate detects identity.
 
 ---
 
-## How it works
+## How It Works
 
-FaceGate sits between your authentication and your content:
+Just Plug it into your existing authentication flow — after signup and after login. That's it.
 
-1. **Signup** → user enrolls their face via World ID Selfie Check
-2. **Every login** → user verifies same face → same nullifier → access granted
-3. **Different face** → different nullifier → no match → blocked
+1. **Signup** — user enrolls their face via World ID Selfie Check
+2. **Every login** — user verifies same face → same cryptographic nullifier → access granted
+3. **Different face** — different nullifier → no match → blocked
 
-Zero biometric data stored. Only a cryptographic nullifier — a per-app, per-person hash that proves continuity without revealing identity.
+ See [`demo-netflix/lib/facegate.ts`](./demo-netflix/lib/facegate.ts) for a complete integration in one file, and [`demo-netflix/`](./demo-netflix/) for a full working example.
 
-Developer's App → @facegate/sdk → FaceGate Server → World ID Selfie Check
-
-
-FaceGate holds one World ID account. Developers get an API key. Our server handles all World ID communication internally — developers never touch World ID credentials directly.
+FaceGate is a **provider model** — one World ID account powers all downstream platforms. Each developer gets an API key and a unique action string, ensuring nullifier isolation across platforms. The same person on Netflix and Spotify produces different nullifiers — unlinkable across apps.
 
 ---
 
 ## Quick Start
 
-### 1. Get an API key
+### 1. Get your API key
 
-Visit [face-gate-ecru.vercel.app](https://face-gate-ecru.vercel.app) → sign in → generate your API key.
+Visit [face-gate-ecru.vercel.app](https://face-gate-ecru.vercel.app) → sign in with Google → generate your API key.
 
 ### 2. Install
 
@@ -53,37 +44,31 @@ Visit [face-gate-ecru.vercel.app](https://face-gate-ecru.vercel.app) → sign in
 npm install @facegate/sdk @worldcoin/idkit
 ```
 
-### 3. Initialize
+### 3. Add to your auth flow
 
+**On signup — enroll face:**
 ```typescript
 import { FaceGate } from '@facegate/sdk'
 
 const gate = new FaceGate({ apiKey: 'fg_live_xxx' })
-```
 
-### 4. Enroll on signup
-
-```typescript
-// After your existing signup flow
+// After your existing signup
 const enrollData = await gate.enroll(userId)
 
-// Show IDKit widget with enrollData
-// → user scans QR with World App → Selfie Check runs
+// Show IDKit widget with enrollData → user scans QR → Selfie Check runs
 await gate.confirm(userId, idkitProof)
 ```
 
-### 5. Verify on every login
-
+**On every login — verify face:**
 ```typescript
 // After password check passes
 const enrollData = await gate.enroll(userId)
 
-// Show IDKit widget with enrollData  
-// → user scans QR → same face = authorized, different face = blocked
+// Show IDKit widget → same face = granted, different face = blocked
 const result = await gate.verify(userId, idkitProof)
 
 if (!result.authorized) {
-  throw new Error('Face not recognized — access blocked')
+  throw new Error('Access blocked — face not recognized')
 }
 ```
 
@@ -91,55 +76,59 @@ if (!result.authorized) {
 
 ## SDK Reference
 
-### `gate.enroll(userId)`
-Returns `rpContext`, `appId`, and `action` needed to show the IDKit widget. Safe to call on every visit — returns rpContext even if already enrolled.
-
-### `gate.confirm(userId, proof)`
-Stores the nullifier after first enrollment. Call this in IDKit's `handleVerify` callback on signup.
-
-### `gate.verify(userId, proof)`
-Checks if the returning face matches the enrolled nullifier. Call this in IDKit's `handleVerify` callback on login.
-
-### `gate.check(userId)`
-Returns `{ enrolled: boolean }`. Use this to decide whether to show the enroll or verify flow.
+| Method | When to call | What it does |
+|--------|-------------|--------------|
+| `gate.enroll(userId)` | Signup + every login | Returns `rpContext`, `appId`, `action` for the IDKit widget |
+| `gate.confirm(userId, proof)` | After first face scan | Stores the nullifier — completes enrollment |
+| `gate.verify(userId, proof)` | After returning face scan | Checks nullifier matches → returns `{ authorized: boolean }` |
+| `gate.check(userId)` | Optional | Returns `{ enrolled: boolean }` to decide which flow to show |
 
 ---
 
 ## Why Selfie Check
 
-Selfie Check is a medium-assurance biometric credential — it confirms **liveness** and **continuity** without requiring Orb verification. This makes it ideal for subscription abuse prevention:
+Selfie Check is a medium-assurance biometric credential — liveness detection without requiring Orb verification. It is the right tool for subscription abuse prevention because it works as a:
 
-- No Orb required — any World ID user can complete it
-- Liveness detection — prevents photo/video spoofing  
-- Continuity — same person returning, not just same password
-- 90-day validity window — periodic re-verification built in
-- Zero biometric storage — only cryptographic nullifiers
+- **Continuity signal** — same person returning, not just same password
+- **Abuse-prevention signal** — eliminates passive credential sharing entirely
+- **Fairness signal** — ensures each paying account is used by its rightful owner
+- **Friction by design** — coordinated sharing requires real-time effort on every login, making it impractical at scale
+- **Liveness detection** — prevents photo and video spoofing
+- **Zero biometric storage** — only cryptographic nullifiers stored
 
 ---
 
 ## Privacy
 
-- No face images stored anywhere
-- No biometric data leaves the user's device
-- Only nullifiers stored — cryptographic hashes that prove continuity without revealing identity
-- Different apps produce different nullifiers — unlinkable across platforms
+FaceGate stores nothing about the user's face. The Selfie Check runs on the user's device. What gets stored:
+
+- A nullifier — a cryptographic hash derived from the user's World ID, the app, and the action. It proves continuity without revealing identity.
+- Nothing else. No images, no biometric data, no personal information.
+- Different apps produce different nullifiers — unlinkable across platforms.
+
+---
+
+## Demo
+
+See [`demo-netflix/`](./demo-netflix/) — a Netflix-style streaming app showing FaceGate integration end to end. Sign up, enroll your face, content unlocks. Sign in from a different face — get blocked.
+
+**Live demo:** [demo-netflix-green.vercel.app](https://demo-netflix-green.vercel.app)
 
 ---
 
 ## Repo Structure
 
 facegate/
-├── server/ — Next.js backend + developer dashboard (deployed on Vercel)
+├── server/ — Next.js backend + developer dashboard
 ├── sdk/ — @facegate/sdk npm package
-├── demo/ — StreamVault demo app (coming)
+├── demo-netflix/ — Netflix-style demo app
 └── FEEDBACK.md — World ID Selfie Check developer feedback
-
 
 ---
 
-## Built at ETHOnline 2026
+## Links
 
-World ID Selfie Check prize track — abuse prevention via continuity verification.
-
-**Live:** [face-gate-ecru.vercel.app](https://face-gate-ecru.vercel.app)  
-**npm:** [@facegate/sdk](https://npmjs.com/package/@facegate/sdk)
+- **Dashboard:** [face-gate-ecru.vercel.app](https://face-gate-ecru.vercel.app)
+- **Demo:** [demo-netflix-green.vercel.app](https://demo-netflix-green.vercel.app)
+- **npm:** [@facegate/sdk](https://npmjs.com/package/@facegate/sdk)
+- **Built at:** ETHGlobal Online 2026 — World ID Selfie Check prize track
