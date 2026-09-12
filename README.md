@@ -34,6 +34,9 @@ See [`demo-netflix/lib/facegate.ts`](./demo-netflix/lib/facegate.ts) for a compl
 
 ![alt text](image-1.png)
 
+<img width="1615" height="541" alt="image" src="https://github.com/user-attachments/assets/5ce80460-5bb0-432e-ab6b-b044cb5f78ce" />
+
+
 
 ---
 
