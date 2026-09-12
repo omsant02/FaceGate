@@ -20,13 +20,16 @@ export default function SignUp() {
     setLoading(true)
     setError('')
     try {
+      // Step 1 — check only, don't create user yet
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, checkOnly: true }),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error); setLoading(false); return }
+
+      // Step 2 — start face enrollment
       const enroll = await enrollUser(email)
       setEnrollData(enroll)
       setShowFaceGate(true)
@@ -36,7 +39,15 @@ export default function SignUp() {
     setLoading(false)
   }
 
-  const handleFaceEnrolled = () => {
+  const handleFaceEnrolled = async () => {
+    try {
+      // Step 3 — face enrolled, NOW create user in DB
+      await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+    } catch (e) {}
     localStorage.setItem('demonetflix_user', JSON.stringify({ email, verified: true }))
     router.push('/')
   }
@@ -98,7 +109,7 @@ export default function SignUp() {
             opacity: loading ? 0.7 : 1, marginBottom: '16px',
           }}
         >
-          {loading ? 'Creating account...' : 'Create Account'}
+          {loading ? 'Checking...' : 'Create Account'}
         </button>
 
         <div style={{
