@@ -1,4 +1,5 @@
 # FaceGate
+**Credential sharing prevention SDK for subscription platforms — powered by World ID Selfie Check.**
 
 > One account. One face. No sharing.
 
@@ -29,6 +30,18 @@ Just Plug it into your existing authentication flow — after signup and after l
  See [`demo-netflix/lib/facegate.ts`](./demo-netflix/lib/facegate.ts) for a complete integration in one file, and [`demo-netflix/`](./demo-netflix/) for a full working example.
 
 FaceGate is a **provider model** — one World ID account powers all downstream platforms. Each developer gets an API key and a unique action string, ensuring nullifier isolation across platforms. The same person on Netflix and Spotify produces different nullifiers — unlinkable across apps.
+
+---
+
+## Repo Structure
+
+```
+facegate/
+├── server/          — Next.js backend + developer dashboard
+├── sdk/             — @facegate/sdk npm package
+├── demo-netflix/    — Netflix-style demo app
+└── FEEDBACK.md      — World ID Selfie Check developer feedback
+```
 
 ---
 
@@ -105,28 +118,6 @@ FaceGate stores nothing about the user's face. The Selfie Check runs on the user
 - A nullifier — a cryptographic hash derived from the user's World ID, the app, and the action. It proves continuity without revealing identity.
 - Nothing else. No images, no biometric data, no personal information.
 - Different apps produce different nullifiers — unlinkable across platforms.
-
----
-
-## Repo Structure
-
-```
-facegate/
-├── server/          — Next.js backend + developer dashboard
-├── sdk/             — @facegate/sdk npm package
-├── demo-netflix/    — Netflix-style demo app
-└── FEEDBACK.md      — World ID Selfie Check developer feedback
-```
-
----
-
-## Repo Structure
-
-facegate/
-├── server/ — Next.js backend + developer dashboard
-├── sdk/ — @facegate/sdk npm package
-├── demo-netflix/ — Netflix-style demo app
-└── FEEDBACK.md — World ID Selfie Check developer feedback
 
 ---
 
