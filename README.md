@@ -86,7 +86,8 @@ Published as @facegate/sdk on npm. This is what platform developers install.
 
 https://www.npmjs.com/package/@facegate/sdk
 
-<img width="2942" height="1688" alt="image" src="https://github.com/user-attachments/assets/2a7f1110-e808-4016-92e5-d7ec5d4c1b8f" />
+<img width="2948" height="1690" alt="image" src="https://github.com/user-attachments/assets/323ab4f8-8df3-40d0-89e6-fd4004b3f878" />
+
 
 
 ### 3. Demo Netflix (demo-netflix/)
