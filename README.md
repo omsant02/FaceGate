@@ -11,6 +11,21 @@ This creates meaningful friction: even coordinated sharing requires the original
 
 ---
 
+## What FaceGate abstracts
+
+Integrating World ID Selfie Check directly requires:
+- Setting up a Relying Party (RP) — registering with World, obtaining an RP ID, 
+  managing a signing key
+- Generating RP signatures server-side using `@worldcoin/idkit-core/signing` 
+  on every verification request
+- Verifying ZK proofs against World's API (`/api/v4/verify/{rp_id}`)
+- Extracting and storing nullifiers per user, per platform
+- Managing action string isolation to prevent cross-platform nullifier collisions
+
+FaceGate handles all of this. You get one API key and three lines of code.
+
+---
+
 ## The Problem
 
 One Netflix account. Five households using it. The platform loses revenue on every shared account. Password-based auth has no way to enforce "one person per account."
